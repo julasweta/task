@@ -1,6 +1,5 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-
 import { AppModule } from './app.module';
 import { CustomConfigService } from './config/config.service';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -13,10 +12,10 @@ async function bootstrap() {
     app.get<CustomConfigService>(CustomConfigService);
 
   app.use(cors());
-
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
+      whitelist: true,
     }),
   );
 
@@ -31,7 +30,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   await app.listen(appConfig.app_port, () => {
-    Logger.log(`http://${appConfig.app_host}:${appConfig.app_port}/api`, 'Doc');
+    Logger.log(`http://${appConfig.app_host}}/api`, 'Doc');
   });
 }
 bootstrap();
